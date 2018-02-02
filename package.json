@@ -1,0 +1,21 @@
+{
+  "name": "droptable",
+  "version": "1.0.0",
+  "description": "",
+  "main": "droptable.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "loot",
+    "rpg",
+    "loot-table",
+    "drop",
+    "drop-table"
+  ],
+  "author": "Burkay Ozdemir",
+  "license": "ISC",
+  "dependencies": {
+    "random-number-csprng": "^1.0.2"
+  }
+}
