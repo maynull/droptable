@@ -16,6 +16,10 @@
   "author": "Burkay Ozdemir",
   "license": "ISC",
   "dependencies": {
+    "bluebird": "^3.5.1",
     "random-number-csprng": "^1.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^4.17.0"
   }
 }
