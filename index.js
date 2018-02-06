@@ -35,8 +35,8 @@ function createLootTable(name, dropCount) {
       if (!itemEntry.forceDrop && (itemEntry.drop != null && typeof itemEntry.drop === 'function')) {
         return await itemEntry.drop();
       } else {
-          let stack = await randomNumber(itemEntry.minStack, itemEntry.maxStack);
-          return {item:itemEntry.item, stack};
+        let stack = await randomNumber(itemEntry.minStack, itemEntry.maxStack);
+        return { item: itemEntry.item, stack };
       }
     },
     drop: async function dropItem(subItemEntryArr) {
@@ -47,11 +47,16 @@ function createLootTable(name, dropCount) {
     dropLoot: async function dropLoot() {
       let curDropCount = this._dropCount;
       let filteredItemEntries = this._itemEntries.slice();
-      let drops = await Promise.all(filteredItemEntries.filter(itemEntry => {
-        if (itemEntry.isAlways) {
-          return itemEntry;
-        }
-      }).map(itemEntry => {return this.select(itemEntry)})
+      let drops = await Promise.all(
+        filteredItemEntries
+          .filter(itemEntry => {
+            if (itemEntry.isAlways) {
+              return itemEntry;
+            }
+          })
+          .map(itemEntry => {
+            return this.select(itemEntry);
+          })
       );
       if (drops.length >= curDropCount) {
         return drops;
