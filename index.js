@@ -20,22 +20,25 @@ function createLootTable(name, dropCount) {
     name: name,
     _itemEntries: [],
     _dropCount: dropCount,
-    add: function addEntry(item, weight, forceDrop, isAlways, isUnique, minStack, maxStack) {
-      this._itemEntries.push({
-        item: item,
-        weight: weight,
-        forceDrop: forceDrop,
-        isAlways: isAlways,
-        isUnique: isUnique,
-        minStack: minStack,
-        maxStack: maxStack
-      });
+    add: function addEntry(item, opts) {
+      const defaults = {
+        weight: 10,
+        forceDrop: false,
+        isAlways: false,
+        isUnique: false,
+        minStack: 1,
+        maxStack: 1
+      };
+      const entry = Object.assign({}, defaults, opts, { item });
+      this._itemEntries.push(entry);
     },
     select: async function selectDrop(itemEntry) {
-      if (!itemEntry.forceDrop && (itemEntry.drop != null && typeof itemEntry.drop === 'function')) {
-        return await itemEntry.drop();
+      if (!itemEntry.forceDrop && (itemEntry.item.drop != null && typeof itemEntry.item.drop === 'function')) {
+        return await itemEntry.item.drop();
       } else {
-        let stack = await randomNumber(itemEntry.minStack, itemEntry.maxStack);
+        let stack = itemEntry.minStack;
+        if (itemEntry.maxStack > itemEntry.minStack)
+          stack = await randomNumber(itemEntry.minStack, itemEntry.maxStack);
         return { item: itemEntry.item, stack };
       }
     },

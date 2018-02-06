@@ -33,29 +33,29 @@ async function CreateAllEntries() {
   dropCount = await randomNumber(1, 2);
   equipmentTable = createLootTable('equipments', dropCount);
 
-  equipmentTable.add(sword, 10, false, false, true, 0, 1);
-  equipmentTable.add(helmet, 10, false, false, true, 0, 1);
+  equipmentTable.add(sword, { isUnique: true });
+  equipmentTable.add(helmet, { isUnique: true });
 
   expect(equipmentTable).to.be.not.null;
   expect(equipmentTable).to.have.property('name');
   expect(equipmentTable._itemEntries).to.be.an('array');
 
-  chestOne.add(gold, 10, false, true, false, 10, 50);
-  chestOne.add(equipmentTable, 8, false, false, true, 0, 1);
+  chestOne.add(gold, { isAlways: true, minStack: 10, maxStack: 50 });
+  chestOne.add(equipmentTable, { weight: 8, isUnique: true });
 
   expect(chestOne).to.be.not.null;
   expect(chestOne).to.have.property('name');
   expect(chestOne._itemEntries).to.be.an('array');
 
-  chestTwo.add(silver, 10, false, true, false, 0, 50);
-  chestTwo.add(equipmentTable, 8, false, false, true, 0, 1);
+  chestTwo.add(silver, { isAlways: true, minStack: 5, maxStack: 50 });
+  chestTwo.add(equipmentTable, { weight: 8, isUnique: true });
 
   expect(chestTwo).to.be.not.null;
   expect(chestTwo).to.have.property('name');
   expect(chestTwo._itemEntries).to.be.an('array');
 
-  megaChest.add(chestOne, 10, true, false, false, 1, 5);
-  megaChest.add(chestTwo, 10, true, false, false, 1, 5);
+  megaChest.add(chestOne, { forceDrop: true, minStack: 1, maxStack: 5 });
+  megaChest.add(chestTwo, { forceDrop: true, minStack: 1, maxStack: 5 });
 
   expect(megaChest).to.be.not.null;
   expect(megaChest).to.have.property('name');
@@ -64,19 +64,19 @@ async function CreateAllEntries() {
 
 async function DropLoots() {
   let drops = await chestOne.dropLoot();
-  console.log('chest one loots:');
+  console.log('--chest one loots:--');
   drops.forEach(drop => expect(drop.item.name).to.exist);
   drops.forEach(drop => {
     console.log(drop.item.name + ' ' + drop.stack);
   });
   drops = await chestTwo.dropLoot();
-  console.log('chest two loots:');
+  console.log('--chest two loots:--');
   drops.forEach(drop => expect(drop.item.name).to.exist);
   drops.forEach(drop => {
     console.log(drop.item.name + ' ' + drop.stack);
   });
   drops = await megaChest.dropLoot();
-  console.log('mega chest loots:');
+  console.log('--mega chest loots:--');
   drops.forEach(drop => expect(drop.item.name).to.exist);
   drops.forEach(drop => {
     console.log(drop.item.name + ' ' + drop.stack);
