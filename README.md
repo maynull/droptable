@@ -1,9 +1,9 @@
 # DropTable
 
-A loot drop table implementation in NodeJS.
+A loot/drop table implementation in NodeJS.
 
-Drop Table is used to create & loot from LootTables which includes items, other loot tables using their weights. Weights are arbitrary, not percentages, and don't need to add up to 100.
-There's a good overview of loot tables on
+Create & loot from droptables which can include items, or other droptables using their weights. Weights are arbitrary, not percentages, and don't need to add up to 100.
+There's a good overview of drop tables on
 [Lost Garden](http://www.lostgarden.com/2014/12/loot-drop-tables.html).
 
 ```javascript
