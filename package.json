@@ -1,5 +1,5 @@
 {
-  "name": "droptable",
+  "name": "drop-loot",
   "version": "1.0.0",
   "description": "Rpg-like loot system",
   "main": "index.js",
@@ -10,22 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/maynull/droptable"
   },
-  "keywords": [
-    "loot",
-    "rpg",
-    "loot-table",
-    "drop",
-    "drop-table",
-    "items",
-    "roller",
-    "drops",
-    "drop",
-    "roll",
-    "rpg",
-    "d&d",
-    "table",
-    "random"
-  ],
+  "keywords": ["loot", "rpg", "loot-table", "drop", "drop-table", "droptable", "items", "roller", "drops", "drop", "roll", "rpg", "d&d", "table", "random"],
   "author": "Burkay Ozdemir",
   "license": "GPL-3.0-or-later",
   "dependencies": {
