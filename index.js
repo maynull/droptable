@@ -20,6 +20,15 @@ function createLootTable(name, dropCount) {
     name: name,
     _itemEntries: [],
     _dropCount: dropCount,
+    /**
+     * @param {Object} item item created by createItem
+     * @param {int} weight probability of item
+     * @param {bool} forceDrop should drop regardless of type?
+     * @param {bool} isAlways should alway drop?
+     * @param {bool} isUnique is it a unique drop?
+     * @param {int} minStack minimum stack in loot
+     * @param {int} maxStack maximum stack in loot
+     */
     add: function addEntry(item, opts) {
       const defaults = {
         weight: 10,

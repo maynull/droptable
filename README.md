@@ -15,18 +15,18 @@ let helmet = createItem('helmet');
 //Create Loot Table
 let equipmentTable = createLootTable('equipments', dropCount);
 //Add Loot Table Entry
-  equipmentTable.add(sword, { isUnique: true });
-  equipmentTable.add(helmet, { isUnique: true });
+equipmentTable.add(sword, { isUnique: true });
+equipmentTable.add(helmet, { isUnique: true });
 //Create Another Loot Table
 let chestOne = createLootTable('gold chest', dropCount);
 //Add Loot Table Entry
-  chestOne.add(gold, { isAlways: true, minStack: 10, maxStack: 50 });
-  chestOne.add(equipmentTable, { weight: 8, isUnique: true });
+chestOne.add(gold, { isAlways: true, minStack: 10, maxStack: 50 });
+chestOne.add(equipmentTable, { weight: 8, isUnique: true });
 //Create Another Loot Table
 let chestTwo = createLootTable('silver chest', dropCount);
 //Add Loot Table Entry
-  chestTwo.add(silver, { isAlways: true, minStack: 5, maxStack: 50 });
-  chestTwo.add(equipmentTable, { weight: 8, isUnique: true });
+chestTwo.add(silver, { isAlways: true, minStack: 5, maxStack: 50 });
+chestTwo.add(equipmentTable, { weight: 8, isUnique: true });
 //Drop Loot from Chest One
 let drops = await chestOne.dropLoot();
 console.log('chest one loots:');

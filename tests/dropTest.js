@@ -56,7 +56,6 @@ async function CreateAllEntries() {
 
   megaChest.add(chestOne, { forceDrop: true, minStack: 1, maxStack: 5 });
   megaChest.add(chestTwo, { forceDrop: true, minStack: 1, maxStack: 5 });
-
   expect(megaChest).to.be.not.null;
   expect(megaChest).to.have.property('name');
   expect(megaChest._itemEntries).to.be.an('array');
