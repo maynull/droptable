@@ -24,14 +24,13 @@ async function CreateAllEntries() {
   let silver = createItem('silver');
   let sword = createItem('sword');
   let helmet = createItem('helmet');
-  let dropCount = await randomNumber(1, 2);
-  chestOne = createLootTable('gold chest', dropCount);
+  chestOne = createLootTable('gold chest', 1, 2);
   dropCount = await randomNumber(1, 2);
-  chestTwo = createLootTable('silver chest', dropCount);
+  chestTwo = createLootTable('silver chest', 1, 2);
   dropCount = await randomNumber(1, 2);
-  megaChest = createLootTable('mega chest', dropCount);
+  megaChest = createLootTable('mega chest', 1, 2);
   dropCount = await randomNumber(1, 2);
-  equipmentTable = createLootTable('equipments', dropCount);
+  equipmentTable = createLootTable('equipments', 1, 2);
 
   equipmentTable.add(sword, { isUnique: true });
   equipmentTable.add(helmet, { isUnique: true });

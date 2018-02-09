@@ -15,11 +15,12 @@ async function randomPick(items) {
   });
 }
 
-function createLootTable(name, dropCount) {
+function createLootTable(name, minDrop, maxDrop) {
   return {
     name: name,
     _itemEntries: [],
-    _dropCount: dropCount,
+    _minDrop: minDrop,
+    _maxDrop: maxDrop,
     /**
      * @param {Object} item item created by createItem
      * @param {int} weight probability of item
@@ -46,8 +47,7 @@ function createLootTable(name, dropCount) {
         return await itemEntry.item.drop();
       } else {
         let stack = itemEntry.minStack;
-        if (itemEntry.maxStack > itemEntry.minStack)
-          stack = await randomNumber(itemEntry.minStack, itemEntry.maxStack);
+        if (itemEntry.maxStack > itemEntry.minStack) stack = await randomNumber(itemEntry.minStack, itemEntry.maxStack);
         return { item: itemEntry.item, stack };
       }
     },
@@ -57,7 +57,7 @@ function createLootTable(name, dropCount) {
       return await this.select(itemEntry);
     },
     dropLoot: async function dropLoot() {
-      let curDropCount = this._dropCount;
+      let curDropCount = await randomNumber(this._minDrop, this._maxDrop);
       let filteredItemEntries = this._itemEntries.slice();
       let drops = await Promise.all(
         filteredItemEntries
