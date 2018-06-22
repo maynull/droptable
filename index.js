@@ -36,7 +36,7 @@ function createLootTable(name, minDrop, maxDrop, totalWeight) {
     _itemEntries: [],
     _minDrop: minDrop,
     _maxDrop: maxDrop,
-    _totalWeight = totalWeight,
+    _totalWeight: totalWeight,
     /**
      * @param {Object} item item created by createItem
      * @param {int} weight probability of item
