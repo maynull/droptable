@@ -1,11 +1,26 @@
 const randomNumber = require('random-number-csprng');
 const Promise = require('bluebird');
 
-async function randomPick(items) {
-  const totalWeight = items.reduce(function(previous, item) {
+async function randomPick(items, totalWeight) {
+
+  let _totalWeight = 0;
+
+  if (totalWeight)
+    _totalWeight = totalWeight;
+
+  const itemWeight = items.reduce(function (previous, item) {
     return { weight: previous.weight + item.weight };
   }).weight;
-  const targetWeight = await randomNumber(0, totalWeight);
+
+  if (itemWeight > _totalWeight)
+    _totalWeight = itemWeight;
+
+  let targetWeight = 0;
+
+  if (_totalWeight > 0) {
+    targetWeight = await randomNumber(0, _totalWeight);
+  }
+
   let currentWeight = 0;
   return items.find(item => {
     currentWeight += item.weight;
@@ -15,12 +30,13 @@ async function randomPick(items) {
   });
 }
 
-function createLootTable(name, minDrop, maxDrop) {
+function createLootTable(name, minDrop, maxDrop, totalWeight) {
   return {
     name: name,
     _itemEntries: [],
     _minDrop: minDrop,
     _maxDrop: maxDrop,
+    _totalWeight = totalWeight,
     /**
      * @param {Object} item item created by createItem
      * @param {int} weight probability of item
@@ -32,7 +48,7 @@ function createLootTable(name, minDrop, maxDrop) {
      */
     add: function addEntry(item, opts) {
       const defaults = {
-        weight: 10,
+        weight: 0,
         forceDrop: false,
         isAlways: false,
         isUnique: false,
@@ -53,7 +69,7 @@ function createLootTable(name, minDrop, maxDrop) {
     },
     drop: async function dropItem(subItemEntryArr) {
       const filteredItemsEntries = subItemEntryArr === undefined ? this._itemEntries : subItemEntryArr;
-      let itemEntry = await randomPick(filteredItemsEntries);
+      let itemEntry = await randomPick(filteredItemsEntries, this._totalWeight);
       return await this.select(itemEntry);
     },
     dropLoot: async function dropLoot() {
