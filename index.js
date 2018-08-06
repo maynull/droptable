@@ -70,7 +70,10 @@ function createLootTable(name, minDrop, maxDrop, totalWeight) {
     drop: async function dropItem(subItemEntryArr) {
       const filteredItemsEntries = subItemEntryArr === undefined ? this._itemEntries : subItemEntryArr;
       let itemEntry = await randomPick(filteredItemsEntries, this._totalWeight);
-      return await this.select(itemEntry);
+      if (itemEntry)
+        return await this.select(itemEntry);
+      else
+        return undefined;
     },
     dropLoot: async function dropLoot() {
       let curDropCount = await randomNumber(this._minDrop, this._maxDrop);
@@ -92,9 +95,11 @@ function createLootTable(name, minDrop, maxDrop, totalWeight) {
         curDropCount -= drops.length;
         for (let i = 0; i < curDropCount; i++) {
           const nextDrop = await this.drop(filteredItemEntries);
-          drops.push(nextDrop);
-          if (nextDrop.item.isUnique) {
-            filteredItemEntries = filteredItemEntries.filter(item => item !== nextDrop.item);
+          if (nextDrop) {
+            drops.push(nextDrop);
+            if (nextDrop.item.isUnique) {
+              filteredItemEntries = filteredItemEntries.filter(item => item !== nextDrop.item);
+            }
           }
         }
         return drops;
