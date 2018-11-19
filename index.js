@@ -59,13 +59,9 @@ function createLootTable(name, minDrop, maxDrop, totalWeight) {
       this._itemEntries.push(entry);
     },
     select: async function selectDrop(itemEntry) {
-      if (!itemEntry.forceDrop && (itemEntry.item.drop != null && typeof itemEntry.item.drop === 'function')) {
-        return await itemEntry.item.drop();
-      } else {
-        let stack = itemEntry.minStack;
-        if (itemEntry.maxStack > itemEntry.minStack) stack = await randomNumber(itemEntry.minStack, itemEntry.maxStack);
-        return { item: itemEntry.item, stack };
-      }
+      let stack = itemEntry.minStack;
+      if (itemEntry.maxStack > itemEntry.minStack) stack = await randomNumber(itemEntry.minStack, itemEntry.maxStack);
+      return {item: itemEntry.item, forceDrop:itemEntry.forceDrop, stack};
     },
     drop: async function dropItem(subItemEntryArr) {
       const filteredItemsEntries = subItemEntryArr === undefined ? this._itemEntries : subItemEntryArr;
@@ -75,11 +71,9 @@ function createLootTable(name, minDrop, maxDrop, totalWeight) {
       else
         return undefined;
     },
-    dropLoot: async function dropLoot() {
-      let curDropCount = await randomNumber(this._minDrop, this._maxDrop);
-      let filteredItemEntries = this._itemEntries.slice();
+    selectLootFromEntries : async function(entries, count, preStack) {
       let drops = await Promise.all(
-        filteredItemEntries
+        entries
           .filter(itemEntry => {
             if (itemEntry.isAlways) {
               return itemEntry;
@@ -89,21 +83,44 @@ function createLootTable(name, minDrop, maxDrop, totalWeight) {
             return this.select(itemEntry);
           })
       );
-      if (drops.length >= curDropCount) {
-        return drops;
-      } else {
-        curDropCount -= drops.length;
-        for (let i = 0; i < curDropCount; i++) {
-          const nextDrop = await this.drop(filteredItemEntries);
+      if (drops.length < count) {
+        count -= drops.length;
+        for (let i = 0; i < count; i++) {
+          const nextDrop = await this.drop(entries);
           if (nextDrop) {
             drops.push(nextDrop);
             if (nextDrop.item.isUnique) {
-              filteredItemEntries = filteredItemEntries.filter(item => item !== nextDrop.item);
+              entries = entries.filter(item => item !== nextDrop.item);
             }
           }
         }
-        return drops;
       }
+      let singleDrops = [];
+      for(let i = 0; i < drops.length; i++){
+        let drop = drops[i];
+        if(preStack)
+          drop.stack *= preStack;
+        if(drop.item && drop.item.dropLoot && !drop.forceDrop){
+          const osman = await drop.item.dropLoot(drop.stack);
+          osman.forEach((element)=>{
+            singleDrops.push(element);
+          });
+        }else{
+          singleDrops.push(drop);
+        }
+      }
+      return singleDrops;
+    },
+    dropLoot: async function dropLoot(preStack) {
+      let curDropCount = 1;
+      if(this._maxDrop > this._minDrop) {
+        curDropCount = await randomNumber(this._minDrop, this._maxDrop);
+      }else{
+        curDropCount = this._minDrop;
+      }
+      let filteredItemEntries = this._itemEntries.slice();
+      let drops = await this.selectLootFromEntries(filteredItemEntries, curDropCount, preStack);
+      return drops;
     }
   };
 }
